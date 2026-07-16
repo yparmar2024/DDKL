@@ -1,0 +1,27 @@
+:root {
+  --bg-color: #ffffff;
+  --secondary-color: #000000;
+  --primary-color: #6E0F4B;
+  --font-family: 'KION Spezia', 'Aptos Display', sans-serif;
+  --border-color: #eaeaea;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--secondary-color);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+button {
+  font-family: var(--font-family);
+}

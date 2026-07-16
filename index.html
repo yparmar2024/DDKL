@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DDTK Renderer</title>
+  <link rel="stylesheet" href="./src/css/main.css" />
+  <link rel="stylesheet" href="./src/css/layout.css" />
+  <link rel="stylesheet" href="./src/css/sidebar.css" />
+  <link rel="stylesheet" href="./src/css/editor.css" />
+  <link rel="stylesheet" href="./src/css/modal.css" />
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.esm.min.mjs';
+    import elkLayouts from 'https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@latest/dist/mermaid-layout-elk.esm.min.mjs';
+    
+    mermaid.registerLayoutLoaders(elkLayouts);
+    mermaid.initialize({ startOnLoad: false, theme: 'default' });
+    
+    window.mermaid = mermaid;
+    window.initApp();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+  <script src="./src/js/parser.js"></script>
+  <script src="./src/js/examples.js"></script>
+  <script src="./src/js/utils.js"></script>
+  <script src="./src/js/ui.js"></script>
+  <script src="./src/js/editor.js"></script>
+  <script src="./src/js/main.js"></script>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <button class="menu-btn" onclick="toggleSidebar()" title="Open Menu">☰</button>
+      <h1>Dematic Diagram Key Language (DDTK) Renderer </h1>
+    </div>
+    <div class="toolbar">
+      <button id="btn-drawio" class="view-btn secondary-btn" onclick="openInDrawio()">Open in Draw.io</button>
+      <div class="divider"></div>
+      <button id="btn-code" class="view-btn" onclick="setView('code')">Code Only</button>
+      <button id="btn-split" class="view-btn active" onclick="setView('split')">Split View</button>
+      <button id="btn-render" class="view-btn" onclick="setView('render')">Render Only</button>
+    </div>
+  </header>
+
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>DDKL Examples</h2>
+      <button class="close-btn" onclick="toggleSidebar()">×</button>
+    </div>
+    <div class="sidebar-content">
+      <h3>Documentation</h3>
+      <button class="example-btn doc-btn" onclick="openDocsModal()">📖 View Syntax Guide</button>
+      
+      <h3 style="margin-top: 1.5rem;">Load a Preset</h3>
+      <button class="example-btn" onclick="loadExample('basic')">Basic Flowchart</button>
+      <button class="example-btn" onclick="loadExample('decision')">Decision Workflow</button>
+    </div>
+  </div>
+
+  <div class="main-container" id="main">
+    <div class="panel left-panel" id="left">
+      <div class="editor-wrapper">
+        <div class="line-numbers" id="line-numbers"></div>
+        <div class="highlights" id="highlights"></div>
+        <textarea id="code-input" wrap="off" spellcheck="false" placeholder="Enter DDKL code here...
+Or open the ☰ menu in the top left to load an example!"></textarea>
+      </div>
+    </div>
+    
+    <div class="resizer" id="resizer"></div>
+    
+    <div class="panel right-panel" id="right">
+      <div id="diagram-container"></div>
+      
+      <div class="error-box" id="error-box">
+        <div class="error-title">Diagram Error</div>
+        <div class="error-msg" id="error-msg"></div>
+        <button class="tech-error-toggle" onclick="toggleTechError()">Show technical details</button>
+        <div class="tech-error-details" id="tech-error"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Documentation Modal -->
+  <div class="modal-overlay" id="docs-modal-overlay" onclick="closeDocsModal()">
+    <div class="modal" id="docs-modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2>DDKL Syntax Guide</h2>
+        <button class="close-btn modal-close" onclick="closeDocsModal()">×</button>
+      </div>
+      <div class="modal-body doc-layout">
+        <div class="doc-sidebar">
+          <button class="doc-nav-btn active" onclick="showDocSection('doc-layout')">Layout</button>
+          <button class="doc-nav-btn" onclick="showDocSection('doc-subgraphs')">Subgraphs</button>
+          <button class="doc-nav-btn" onclick="showDocSection('doc-nodes')">Nodes</button>
+          <button class="doc-nav-btn" onclick="showDocSection('doc-arrows')">Arrows</button>
+          <button class="doc-nav-btn" onclick="showDocSection('doc-comments')">Comments</button>
+        </div>
+        
+        <div class="doc-content">
+          <div id="doc-layout" class="doc-section active">
+            <h4>1. Layout</h4>
+            <p>Define the chart type and its orientation.</p>
+            <code>&lt;graph&gt;: &lt;orientation&gt;</code>
+            <p><em>Valid graphs:</em> <code>Flowchart</code></p>
+            <p><em>Valid orientations:</em> <code>top_bottom</code>, <code>bottom_top</code>, <code>left_right</code>, <code>right_left</code></p>
+          </div>
+
+          <div id="doc-subgraphs" class="doc-section">
+            <h4>2. Subgraphs</h4>
+            <p>Declare subgraphs and group nodes.</p>
+            <code>Subgraph &lt;id&gt; [&lt;name&gt;]
+    ... nodes ...
+end</code>
+            <p><em>Valid ids:</em> Use snake_case to append words, i.e., "yes_workflow_step_2"</p>
+          </div>
+          
+          <div id="doc-nodes" class="doc-section">
+            <h4>3. Nodes</h4>
+            <p>Declare nodes with a unique ID, a shape type, and the text to display.</p>
+            <code>Node &lt;id&gt; &lt;type&gt;: &lt;description&gt;</code>
+            <p><em>Valid ids:</em> Use snake_case to append words, i.e., "yes_workflow_step_2"</p>
+            <p><em>Valid types:</em></p>
+            <ul>
+              <li><code>step</code>: Creates a rectangular border, used for standard process steps</li>
+              <li><code>decision</code>: Creates a rhombus border, used for branching points</li>
+              <li><code>start</code>: Creates a capsule border, used for starting processes</li>
+              <li><code>end</code>: Creates a capsule border, used for ending processes</li>
+              <li><code>document</code>: Creates a parallelogram border, used for required documents</li>
+              <li><code>db</code>: Creates a cylinder border, used for databases</li>
+            </ul>
+          </div>
+
+          <div id="doc-arrows" class="doc-section">
+            <h4>4. Arrows</h4>
+            <p>Declare arrows to connect nodes by their IDs, optionally include a label in quotes.</p>
+            <code>Arrow &lt;type&gt; [&lt;label&gt;]: &lt;start_id&gt;, &lt;end_id&gt;</code>
+            <p><em>Valid types:</em></p>
+            <ul>
+              <li><code>solid</code>: Creates a solid arrow, used for progression</li>
+              <li><code>dotted</code>: Created a dotted arrow, used for sending information</li>
+            </ul>
+            <p><em>Valid ids:</em> Use snake_case to append words, i.e., "yes_workflow_step_2"</p>
+          </div>
+
+          <div id="doc-comments" class="doc-section">
+            <h4>5. Comments</h4>
+            <p>Declare comments starting with <code>#</code> to use for notes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem 2rem 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 0 0.25rem;
+}
+
+.view-btn {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.view-btn:hover, .view-btn.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: white;
+}
+
+.view-btn.secondary-btn {
+  background: white;
+  color: var(--primary-color);
+  border: 1px solid white;
+  font-weight: 500;
+}
+
+.view-btn.secondary-btn:hover {
+  background: #f0f0f0;
+  border-color: #f0f0f0;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.panel {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.left-panel {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+  background-color: #fafafa;
+}
+
+.right-panel {
+  width: 50%;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  overflow: auto;
+}
+
+.resizer {
+  width: 8px;
+  background-color: var(--border-color);
+  cursor: col-resize;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.resizer:hover, .resizer.dragging {
+  background-color: var(--primary-color);
+}
+
+.resizer::after {
+  content: '⋮';
+  color: #999;
+  font-size: 20px;
+}
+
+.resizer:hover::after, .resizer.dragging::after {
+  color: white;
+}
+
+#diagram-container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding: 1rem;
+  overflow: hidden;
+}

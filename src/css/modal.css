@@ -1,0 +1,202 @@
+.error-box {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #fff0f0;
+  border-left: 4px solid #cc0000;
+  border-radius: 4px;
+  display: none;
+}
+
+.error-box.active {
+  display: block;
+}
+
+.error-title {
+  color: #cc0000;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.error-msg {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.tech-error-toggle {
+  background: none;
+  border: none;
+  color: #0066cc;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+.tech-error-details {
+  display: none;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #666;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.tech-error-details.open {
+  display: block;
+}
+
+/* Documentation Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: white;
+  width: 90%;
+  max-width: 800px;
+  height: 70vh;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.open .modal {
+  transform: translateY(0);
+}
+
+.modal-header {
+  padding: 1.5rem;
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.modal-body.doc-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  padding: 0;
+}
+
+.doc-sidebar {
+  width: 200px;
+  background: #f9f9f9;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.doc-nav-btn {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  color: var(--secondary-color);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.doc-nav-btn:hover {
+  background: #ebebeb;
+}
+
+.doc-nav-btn.active {
+  background: white;
+  border-left-color: var(--primary-color);
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.doc-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  color: #333;
+  line-height: 1.6;
+}
+
+.doc-section {
+  display: none;
+}
+
+.doc-section.active {
+  display: block;
+}
+
+.doc-section h4 {
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.doc-section p {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.doc-section code {
+  display: inline;
+  background: #f4f4f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+  color: #c7254e;
+}
+
+.doc-section > code {
+  display: block;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+  font-size: 0.9rem;
+}
+
+.doc-section ul {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.doc-section li {
+  margin-bottom: 0.25rem;
+}
